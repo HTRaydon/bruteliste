@@ -19,7 +19,7 @@ REPLACEMENTS = {
     'b': 'bB8',
     'e': 'eE3',
     'g': 'gG6',
-    'i': 'iI1!',
+    'i': 'iI1!|',
     'o': 'oO0',
     's': 'sS5$',
     't': 'tT7+',
