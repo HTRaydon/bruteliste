@@ -4,9 +4,9 @@ import itertools
 import string
 
 # Define the command-line arguments
-parser = argparse.ArgumentParser(description='Generate variations of words in an input file.')
-parser.add_argument('-if', '--input-file', required=True, help='The file containing the words to generate variations for')
-parser.add_argument('-of', '--output-file', required=True, help='The file to write the variations to')
+parser = argparse.ArgumentParser(description="Generates variations of words in an input file.",epilog="You can add wildcards just like hashcat in your input file: ?l for lowercases; ?u for uppercases; ?L for letter; ?d for digits; ?s for special characters; ?a for all characters")
+parser.add_argument('-if', '--input-file', required=True, help='the file containing the words to generate variations for')
+parser.add_argument('-of', '--output-file', required=True, help='the file to write the variations to')
 args = parser.parse_args()
 
 # Read the words from the input file
@@ -23,7 +23,7 @@ REPLACEMENTS = {
     'C': 'cC',
     'd': 'dD',      #D
     'D': 'dD',
-    'e': 'eE3€',     #E
+    'e': 'eE3€',    #E
     'E': 'eE3€',
     'f': 'fF',      #F
     'F': 'fF',
@@ -55,22 +55,24 @@ REPLACEMENTS = {
     'S': 'sS5$',
     't': 'tT7+',    #T
     'T': 'tT7+',
-    'u': 'uU',
+    'u': 'uU',      #U
     'U': 'uU',
-    'v': 'vV',
+    'v': 'vV',      #V
     'V': 'vV',
-    'w': 'wW',
+    'w': 'wW',      #W
     'W': 'wW',
-    'x': 'xX',
+    'x': 'xX',      #X
     'X': 'xX',
-    'y': 'yY',
+    'y': 'yY',      #Y
     'Y': 'yY',
-    'z': 'zZ',
-    '?l': string.ascii_lowercase,  # Add all lowercase letters
-    '?u': string.ascii_uppercase,  # Add all uppercase letters
-    '?d': string.digits,  # Add all digits
-    '?s': string.punctuation,  # Add all punctuation
-    '?a': string.ascii_letters + string.digits + string.punctuation,  # Add all letters, digits, and punctuation
+    'z': 'zZ',      #Z
+    'Z': 'zZ',
+    '?l': string.ascii_lowercase,                                       # Add all lowercase letters
+    '?u': string.ascii_uppercase,                                       # Add all uppercase letters
+    '?L': string.ascii_letters,                                         # Add all letters
+    '?d': string.digits,                                                # Add all digits
+    '?s': string.punctuation,                                           # Add all punctuation
+    '?a': string.ascii_letters + string.digits + string.punctuation,    # Add all letters, digits, and punctuation
 }
 
 # Generate variations for every word in the input file
@@ -90,7 +92,7 @@ with open(args.output_file, 'w') as f:
             else:
                 char = word[true_index]
                 next_char = word[true_index+1]
-            if char == '?' and next_char in 'alusd':
+            if char == '?' and next_char in 'alusdL':
                 # Prioritize the '?a', '?u', '?l', and '?d' replacements over the corresponding individual character replacements
                 if next_char == 'a':
                     variations.append(list(REPLACEMENTS['?a']))
@@ -106,6 +108,9 @@ with open(args.output_file, 'w') as f:
                     index_modif += 1
                 elif next_char == 'd':
                     variations.append(list(REPLACEMENTS['?d']))
+                    index_modif += 1
+                elif next_char == 'd':
+                    variations.append(list(REPLACEMENTS['?L']))
                     index_modif += 1
             elif char in REPLACEMENTS:
                 variations.append(list(REPLACEMENTS[char]))
